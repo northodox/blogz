@@ -11,7 +11,7 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(120))
     body = db.Column(db.Text)
-    owner_id = db.Column(db.Integer)
+    owner_id = db.Column(db.Integer, foreign_key = True)
 
     def __init__(self, title, body):
         self.title = title
@@ -20,7 +20,7 @@ class Blog(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(60))
-    blogs = db.Column(db.Integer)
+    blogs = db.Column(db.Integer, foreign_key = True)
 
 @app.route('/', methods = ['POST','GET'])
 def index():
@@ -31,8 +31,10 @@ def create_post():
     if request.method == 'POST':
         blog_title = request.form['blog-title']
         blog_body = request.form['blog-body']
+        blog_author = request.form['blog-author']
         title_error = ''
         body_error = ''
+        author_error = ''
 
         if not blog_title:
             title_error = "All posts need titles, give it one!"
@@ -40,7 +42,10 @@ def create_post():
         if not blog_body:
             body_error = "You can't have a blog post without a post, get writing!"
 
-        if not title_error and not body_error:
+        if not blog_author:
+            author_error = "A person has a name. Write yours here!"
+
+        if not title_error and not body_error and not author_error:
             new_post = Blog(blog_title, blog_body)
             db.session.add(new_post)
             db.session.commit()
