@@ -32,7 +32,7 @@ def create_post():
             title_error = "All posts need titles, give it one!"
         
         if not blog_body:
-            body_error = "You can't have a blog post without a post, start writing!"
+            body_error = "You can't have a blog post without a post, get writing!"
 
         if not title_error and not body_error:
             new_post = Blog(blog_title, blog_body)
@@ -40,6 +40,16 @@ def create_post():
             db.session.commit()
             return redirect('/blog?id={}'.format(new_post.id))
 
+@app.route('/blog')
+def blog():
+    id = request.args.get('id')
+    
+    if not id:
+        posts = Blog.query.all()
+        return render_template('blog.html', posts = posts, title = "Blog Yo' Self!")
+    else:
+        post = Blog.query.get(id)
+        return render_template('post.html', post = post, title = 'Blog post')
 
 if __name__ == "__main__":
     app.run()
