@@ -16,11 +16,11 @@ class Blog(db.Model):
         self.title = title
         self.body = body
 
-@app.route('/')
+@app.route('/', methods = ['POST','GET'])
 def index():
     return redirect('/blog')
 
-@app.route('/createpost')
+@app.route('/createpost', methods = ['POST','GET'])
 def create_post():
     if request.method == 'POST':
         blog_title = request.form['blog-title']
@@ -45,13 +45,13 @@ def create_post():
 
 @app.route('/blog')
 def blog():
-    id = request.args.get('id')
+    blog_id = request.args.get('id')
     
-    if not id:
+    if not blog_id:
         posts = Blog.query.all()
         return render_template('blog.html', posts = posts, title = "Blog Yo' Self!")
     else:
-        post = Blog.query.get(id)
+        post = Blog.query.get(blog_id)
         return render_template('post.html', post = post, title = 'Blog post')
 
 if __name__ == "__main__":
