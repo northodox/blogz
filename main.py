@@ -20,7 +20,7 @@ class Blog(db.Model):
 def index():
     return redirect('/blog')
 
-@app.route('/createpost', methods = ['POST','GET'])
+@app.route('/newpost', methods = ['POST','GET'])
 def create_post():
     if request.method == 'POST':
         blog_title = request.form['blog-title']
@@ -40,8 +40,8 @@ def create_post():
             db.session.commit()
             return redirect('/blog?id={}'.format(new_post.id))
         else:
-            return render_template('createpost.html', title = "New Post", title_error = title_error, body_error = body_error, blog_title = blog_title, blog_body = blog_body)
-    return render_template('createpost.html', title = 'New Post')
+            return render_template('newpost.html', title = "New Post", title_error = title_error, body_error = body_error, blog_title = blog_title, blog_body = blog_body)
+    return render_template('newpost.html', title = 'New Post')
 
 @app.route('/blog')
 def blog():
