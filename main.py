@@ -39,3 +39,7 @@ def create_post():
             db.session.add(new_post)
             db.session.commit()
             return redirect('/blog?id={}'.format(new_post.id))
+
+
+if __name__ == "__main__":
+    app.run()
