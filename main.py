@@ -13,7 +13,7 @@ class Blog(db.Model):
     body = db.Column(db.Text)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, body, owner_id):
+    def __init__(self, title, body, owner):
         self.title = title
         self.body = body
         self.owner = owner
@@ -38,7 +38,7 @@ def create_post():
     if request.method == 'POST':
         blog_title = request.form['blog-title']
         blog_body = request.form['blog-body']
-        blog_author = 
+        blog_author = user.query('username')
         title_error = ''
         body_error = ''
         author_error = ''
