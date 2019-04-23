@@ -69,5 +69,17 @@ def blog():
         post = Blog.query.get(blog_id)
         return render_template('post.html', post = post, title = 'Blog post')
 
+@app.route('/signup', methods = ['POST', 'GET'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+
+        existing_user = User.query.filter_by(username = username).first()
+        if not existing_user:
+            
+    
+
 if __name__ == "__main__":
     app.run()
