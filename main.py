@@ -49,6 +49,23 @@ def signup():
 
         existing_user = User.query.filter_by(username = username).first()
         if not existing_user:
+
+@app.route('/login', methods = ['POST', 'GET'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        users = User.query.filter_by(username=username)
+        if users.count() == 1:
+            user = users.first()
+            if password == user.password:
+                session['user'] = user.username
+                flash('Welcome back, ' + user.username)
+                return redirect("/")
+        flash('Incorrect username or password')
+        return redirect('/login')
             
     
 
