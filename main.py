@@ -1,6 +1,10 @@
 #Main = Controller
-from app import db, app
+from flask import request, redirect, render_template, session, flash
+import cgi
+from app import app, db
 from model import User, Blog
+from hashutils import make_password_hash, check_password_hash
+
 
 @app.route('/', methods = ['POST','GET'])
 def index():
