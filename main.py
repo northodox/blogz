@@ -52,21 +52,23 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
-        username_db_count = User.query.filter_by(email=email).count()
+        username_db_count = User.query.filter_by(username=username).count()
+        if not username:
+            flash('Aw come on, put in a username!')
+            return redirect('/signup')
         if username_db_count > 0:
             flash('Uh Oh! That ' + username + ' is already taken!')
-            return redirect('/register')
+            return redirect('/signup')
         if password != verify:
             flash('Passwords did not match. They have to match!')
-            return redirect('/register')
-        user = User(username=username, password=password)
+            return redirect('/signup')
+        user = User(username=username, hashword=password)
         db.session.add(user)
         db.session.commit()
         session['user'] = user.username
         return redirect("/")
     else:
-        return render_template('register.html')
-
+        return render_template('signup.html')
 
 
 @app.route('/login', methods = ['POST', 'GET'])
@@ -79,13 +81,17 @@ def login():
         users = User.query.filter_by(username=username)
         if users.count() == 1:
             user = users.first()
-            if password == user.password:
+            if check_password_hash(password, user.hashword):
                 session['user'] = user.username
                 flash('Welcome back, ' + user.username)
                 return redirect("/")
         flash('Incorrect username or password')
         return redirect('/login')
     
+@app.route('logout', methods = ['POST'])
+def logout():
+    del session['user']
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run()

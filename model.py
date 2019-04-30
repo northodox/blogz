@@ -1,4 +1,5 @@
 from app import db
+from hashutils import make_password_hash
 
 class Blog(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -14,9 +15,9 @@ class Blog(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(60))
-    password = db.Column(db.String(120))
+    hashword = db.Column(db.String(120))
     blogs = db.relationship('Blog', backref = 'owner')
 
-    def __init__(self, username, password):
+    def __init__(self, username, hashword):
         self.username = username
-        self.password = password
+        self.hashword = make_password_hash(hashword)
