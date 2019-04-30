@@ -88,10 +88,12 @@ def login():
         flash('Incorrect username or password')
         return redirect('/login')
     
-@app.route('logout', methods = ['POST'])
+@app.route('/logout', methods = ['POST'])
 def logout():
     del session['user']
     return redirect('/')
 
 if __name__ == "__main__":
     app.run()
+
+app.secret_key = 'supersecretunknownkeythatkeepseverythingsafebutnotreally'

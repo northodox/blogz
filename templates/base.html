@@ -20,10 +20,12 @@
                 {{ session['user'] }}
                 <form action = '/logout' method = "post" id = 'logout'>
                     <input type = "submit" value = "Log Out" />
+                    |<a href = "/newpost">Create New Entry</a>
                 </form>
                 {% else %}
-                    <a href = "login">Login</a> | <a href = "signup">Sign Up</a> |<a href = "/newpost">Create New Entry</a>
-            <a href = "/blog">Blog Home</a>
+                    <a href = "login">Login</a> | <a href = "signup">Sign Up</a>
+            {% endif %}
+            |<a href = "/blog">Blog Home</a>
         </nav>
 
         {% block content %}

@@ -3,17 +3,17 @@
 <body>
     <h1>New User Signup</h1>
     <form action="/signup" method="POST">
-        <label for="username">Username</label><br>
+        <label for="username">Username</label>
         <input name="username" type="text" value="{{username}}">
-        <span class="error">{{username_error}}</span>
+        <span class="error">{{username_error}}</span><br>
 
-        <label for="password">Password</label><br>
+        <label for="password">Password</label>
         <input name="password" type="password">
-        <span class="error">{{password_error}}</span>
+        <span class="error">{{password_error}}</span><br>
 
-        <label for="verify">Verify Password</label><br>
+        <label for="verify">Verify Password</label>
         <input name="verify" type="password">
-        <span class="error">{{verify_password_error}}</span>
+        <span class="error">{{verify_password_error}}</span><br><br>
 
         <input type="submit">
     </form>
