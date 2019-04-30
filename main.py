@@ -1,4 +1,6 @@
 #Main = Controller
+from app import db, app
+from model import User, Blog
 
 @app.route('/', methods = ['POST','GET'])
 def index():
@@ -46,9 +48,22 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
+        username_db_count = User.query.filter_by(email=email).count()
+        if username_db_count > 0:
+            flash('Uh Oh! That ' + username + ' is already taken!')
+            return redirect('/register')
+        if password != verify:
+            flash('Passwords did not match. They have to match!')
+            return redirect('/register')
+        user = User(username=username, password=password)
+        db.session.add(user)
+        db.session.commit()
+        session['user'] = user.username
+        return redirect("/")
+    else:
+        return render_template('register.html')
 
-        existing_user = User.query.filter_by(username = username).first()
-        if not existing_user:
+
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
@@ -66,7 +81,6 @@ def login():
                 return redirect("/")
         flash('Incorrect username or password')
         return redirect('/login')
-            
     
 
 if __name__ == "__main__":
