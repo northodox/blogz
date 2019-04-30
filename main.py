@@ -15,7 +15,7 @@ def create_post():
     if request.method == 'POST':
         blog_title = request.form['blog-title']
         blog_body = request.form['blog-body']
-        blog_author = user.query('username')
+        blog_author = User.query('username')
         title_error = ''
         body_error = ''
         author_error = ''
@@ -88,12 +88,12 @@ def login():
         flash('Incorrect username or password')
         return redirect('/login')
     
-@app.route('/logout', methods = ['POST'])
+@app.route('/logout', methods = ['POST', 'GET'])
 def logout():
     del session['user']
     return redirect('/')
 
+app.secret_key = 'supersecretunknownkeythatkeepseverythingsafebutnotreally'
+
 if __name__ == "__main__":
     app.run()
-
-app.secret_key = 'supersecretunknownkeythatkeepseverythingsafebutnotreally'

@@ -12,6 +12,9 @@ class Blog(db.Model):
         self.body = body
         self.owner = owner
 
+    def __repr__(self):
+        return '<Movie %r>' % self.title
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(60))
@@ -21,3 +24,6 @@ class User(db.Model):
     def __init__(self, username, hashword):
         self.username = username
         self.hashword = make_password_hash(hashword)
+
+    def __repr__(self):
+        return '<User %r>' %self.username

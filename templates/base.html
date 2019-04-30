@@ -17,10 +17,8 @@
     <body>
         <nav>
             {% if 'user' in session %}
-                {{ session['user'] }}
-                <form action = '/logout' method = "post" id = 'logout'>
-                    <input type = "submit" value = "Log Out" />
-                    |<a href = "/newpost">Create New Entry</a>
+                <h3>Welcome, {{ session['user'] }}!</h3>
+                <a href = "/logout">Log Out</a>|<a href = "/newpost">Create New Entry</a>
                 </form>
                 {% else %}
                     <a href = "login">Login</a> | <a href = "signup">Sign Up</a>
