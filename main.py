@@ -15,7 +15,6 @@ def create_post():
     if request.method == 'POST':
         blog_title = request.form['blog-title']
         blog_body = request.form['blog-body']
-        #blog_author = session['user']
         title_error = ''
         body_error = ''
 
