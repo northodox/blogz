@@ -15,10 +15,9 @@ def create_post():
     if request.method == 'POST':
         blog_title = request.form['blog-title']
         blog_body = request.form['blog-body']
-        blog_author = User.query('username')
+        #blog_author = session['user']
         title_error = ''
         body_error = ''
-        author_error = ''
 
         if not blog_title:
             title_error = "All posts need titles, give it one!"
@@ -26,8 +25,8 @@ def create_post():
         if not blog_body:
             body_error = "You can't have a blog post without a post, get writing!"
 
-        if not title_error and not body_error and not author_error:
-            new_post = Blog(blog_title, blog_body)
+        if not title_error and not body_error:
+            new_post = Blog(blog_title, blog_body, logged_in_user())
             db.session.add(new_post)
             db.session.commit()
             return redirect('/blog?id={}'.format(new_post.id))
@@ -92,6 +91,10 @@ def login():
 def logout():
     del session['user']
     return redirect('/')
+
+def logged_in_user():
+    owner = User.query.filter_by(username=session['user']).first()
+    return owner
 
 app.secret_key = 'supersecretunknownkeythatkeepseverythingsafebutnotreally'
 
