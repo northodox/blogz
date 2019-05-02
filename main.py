@@ -55,27 +55,42 @@ def blog():
 
 @app.route('/signup', methods = ['POST', 'GET'])
 def signup():
+    username_error = ''
+    password_error = ''
+    verify_password_error = ''
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
         username_db_count = User.query.filter_by(username=username).count()
+
         if not username:
-            flash('Aw come on, put in a username!')
-            return redirect('/signup')
+            username_error = 'Aw come on, put in a username!'
         if username_db_count > 0:
-            flash('Uh Oh! That ' + username + ' is already taken!')
-            return redirect('/signup')
+            username_error = 'Uh Oh! That name is already taken!'
+
+        if password == '':
+            password_error = 'You need to type in a password!'
+        elif ' ' in password:
+            password_error = 'Passwords may not contain spaces!'
+        elif len(password) < 3:
+            password_error = 'Passwords must be at least 3 characters long! At LEAST!'
+        
         if password != verify:
-            flash('Passwords did not match. They have to match!')
-            return redirect('/signup')
-        user = User(username=username, hashword=password)
-        db.session.add(user)
-        db.session.commit()
-        session['user'] = user.username
-        return redirect("/")
+            verify_password_error = 'Passwords did not match. They have to match!'
+        elif verify == '':
+            verify_password_error = 'Passwords did not match. They have to match!'
+
+        if username_db_count < 1 and not username_error and not password_error and not verify_password_error:
+            user = User(username, password)
+            db.session.add(user)
+            db.session.commit()
+            session['username'] = username
+            return redirect("/")
+    
     else:
-        return render_template('signup.html')
+        return render_template('signup.html', username_error = username_error, password_error = password_error, verify_password_error = verify_password_error, username = username, password = password, verify = verify)
 
 
 @app.route('/login', methods = ['POST', 'GET'])

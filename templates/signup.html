@@ -2,20 +2,20 @@
 {% block content %}
 <body>
     <h1>New User Signup</h1>
-    <form action="/signup" method="POST">
+    <form action="/signup" method="post">
         <label for="username">Username</label>
-        <input name="username" type="text" value="{{username}}">
-        <span class="error">{{username_error}}</span><br>
+        <input name="username" type="username" value="{{username}}">
+        <p class="error">{{username_error}}</p><br>
 
         <label for="password">Password</label>
         <input name="password" type="password">
-        <span class="error">{{password_error}}</span><br>
+        <p class="error">{{password_error}}</p><br>
 
         <label for="verify">Verify Password</label>
         <input name="verify" type="password">
-        <span class="error">{{verify_password_error}}</span><br><br>
+        <p class="error">{{verify_password_error}}</p><br><br>
 
-        <input type="submit">
+        <input type="submit" value="Signup">
     </form>
 </body>
 {% endblock %}
