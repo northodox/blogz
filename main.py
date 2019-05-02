@@ -37,22 +37,18 @@ def create_post():
 
 @app.route('/blog', methods = ['POST','GET'])
 def blog():
-    username = request.args.get('username')
-    author = User.query.filter_by(username = username).first()
-    if request.args.get('id'):
-        blog_id = request.args.get('id')
-        post = Blog.query.get(blog_id)
-        title = blog_id.title
-        body = blog_id.body
-        return render_template('post.html', post = post, title = title, body = body)
-    elif request.args.get('username'):
-        user_id = request.args.get('username')
-        posts = Blog.query.filter_by(owner_id = user_id).all()
-        return render_template('singleUser.html', posts = posts)
-    
-    if not request.args.get('id'):
-        posts = Blog.query.all()
-        return render_template('blog.html', posts = posts, title = "Blog Yo' Self!")
+    blogs = Blog.query.all()
+
+    if 'id' in request.args:
+        id = request.args.get('id')
+        blogpost = Blog.query.get(id)
+        return render_template('post.html', post = blogpost)
+
+    if "user" in request.args:
+        owner_id = request.args.get('user')
+        posts = Blog.query.filter_by(owner_id = owner_id)
+        username = User.query.get(owner_id)
+        return render_template('singleUser.html', user = username, posts = posts)
 
 @app.route('/signup', methods = ['POST', 'GET'])
 def signup():

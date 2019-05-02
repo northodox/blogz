@@ -3,9 +3,9 @@
 
 <h1>{{user.username}}'s Posts</h1>
 
-{% for x in range(posts) %}
-    <a href = '/blog?id={{posts[x].id}}'>{{posts[x].title}}</a>
-    <p>{{posts[x].body}}</p>
+{% for blog in posts %}
+    <a href = '/post?id={{blog.id}}'>{{blog.title}}</a>
+    <p>{{blog.body}}</p>
 {% endfor %}
 
 {% endblock %}
