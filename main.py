@@ -1,5 +1,5 @@
 #Main = Controller
-from flask import request, redirect, render_template, session, flash
+from flask import request, redirect, render_template, session
 import cgi
 from app import app, db
 from model import User, Blog
@@ -86,7 +86,7 @@ def signup():
             user = User(username = username, hashword = password)
             db.session.add(user)
             db.session.commit()
-            session['username'] = username
+            session['user'] = user.username
             return redirect("/blog")
     
         else:
@@ -107,7 +107,6 @@ def login():
             user = users.first()
             if check_password_hash(password, user.hashword):
                 session['user'] = user.username
-                flash('Welcome back, ' + user.username)
                 return redirect("/blog")
         flash('Incorrect username or password')
         return redirect('/login')
