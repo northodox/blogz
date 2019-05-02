@@ -15,7 +15,7 @@ def index():
 @app.route('/newpost', methods = ['POST','GET'])
 def create_post():
     if request.method == 'POST':
-        author = User.query.filter_by(username = session['username']).first()
+        author = User.query.filter_by(username = session['user']).first()
         blog_title = request.form['blog-title']
         blog_body = request.form['blog-body']
         title_error = ''
@@ -87,7 +87,7 @@ def signup():
             db.session.add(user)
             db.session.commit()
             session['user'] = user.username
-            return redirect("/blog")
+            return redirect("/newpost")
     
         else:
             return render_template('signup.html', username_error = username_error, password_error = password_error, verify_password_error = verify_password_error, username = username, password = password, verify = verify)
@@ -108,7 +108,7 @@ def login():
             user = users.first()
             if check_password_hash(password, user.hashword):
                 session['user'] = user.username
-                return redirect("/blog")
+                return redirect("/")
             else:
                 login_error = 'Incorrect username or password'
                 return render_template('login.html', login_error = login_error)
@@ -116,7 +116,7 @@ def login():
 @app.route('/logout', methods = ['POST', 'GET'])
 def logout():
     del session['user']
-    return redirect('/blog')
+    return redirect('/')
 
 def logged_in_user():
     owner = User.query.filter_by(username=session['user']).first()
