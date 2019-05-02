@@ -97,6 +97,7 @@ def signup():
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
+    login_error = ''
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
@@ -108,8 +109,9 @@ def login():
             if check_password_hash(password, user.hashword):
                 session['user'] = user.username
                 return redirect("/blog")
-        flash('Incorrect username or password')
-        return redirect('/login')
+            else:
+                login_error = 'Incorrect username or password'
+                return render_template('login.html', login_error = login_error)
     
 @app.route('/logout', methods = ['POST', 'GET'])
 def logout():
