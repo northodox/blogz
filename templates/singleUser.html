@@ -1,4 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 
+<h1>{{user.username}}'s Posts</h1>
+
+{% for x in range(posts) %}
+    <a href = '/blog?id={{posts[x].id}}'>{{posts[x].title}}</a>
+    <p>{{posts[x].body}}</p>
+{% endfor %}
+
 {% endblock %}

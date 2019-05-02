@@ -7,9 +7,10 @@ from hashutils import make_password_hash, check_password_hash
 
 app.secret_key = 'supersecretunknownkeythatkeepseverythingsafebutnotreally'
 
-@app.route('/', methods = ['POST','GET'])
+@app.route('/')
 def index():
-    return redirect('/blog')
+    usernames = User.query.all()
+    return render_template('index.html', usernames = usernames)
 
 @app.route('/newpost', methods = ['POST','GET'])
 def create_post():
@@ -34,16 +35,24 @@ def create_post():
             return render_template('newpost.html', title = "New Post", title_error = title_error, body_error = body_error, blog_title = blog_title, blog_body = blog_body)
     return render_template('newpost.html', title = 'New Post')
 
-@app.route('/blog')
+@app.route('/blog', methods = ['POST','GET'])
 def blog():
-    blog_id = request.args.get('id')
+    username = request.args.get('username')
+    author = User.query.filter_by(username = username).first()
+    if request.args.get('id'):
+        blog_id = request.args.get('id')
+        post = Blog.query.get(blog_id)
+        title = blog_id.title
+        body = blog_id.body
+        return render_template('post.html', post = post, title = title, body = body)
+    elif request.args.get('username'):
+        user_id = request.args.get('username')
+        posts = Blog.query.filter_by(owner_id = user_id).all()
+        return render_template('singleUser.html', posts = posts)
     
-    if not blog_id:
+    if not request.args.get('id'):
         posts = Blog.query.all()
         return render_template('blog.html', posts = posts, title = "Blog Yo' Self!")
-    else:
-        post = Blog.query.get(blog_id)
-        return render_template('post.html', post = post, title = 'Blog post')
 
 @app.route('/signup', methods = ['POST', 'GET'])
 def signup():
