@@ -3,5 +3,7 @@
 
 <h1>{{post.title}}</h1>
 <p>{{post.body}}</p>
+<br>
+<p id="author">Author: <a href="/blog?user={{post.owner.id}}" >{{post.owner.username}}</a></p>
 
 {% endblock %}

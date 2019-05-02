@@ -4,7 +4,7 @@
 <h1>{{user.username}}'s Posts</h1>
 
 {% for blog in posts %}
-    <a href = '/post?id={{blog.id}}'>{{blog.title}}</a>
+    <a href = '/blog?id={{blog.id}}'>{{blog.title}}</a>
     <p>{{blog.body}}</p>
 {% endfor %}
 

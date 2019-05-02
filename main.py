@@ -15,6 +15,7 @@ def index():
 @app.route('/newpost', methods = ['POST','GET'])
 def create_post():
     if request.method == 'POST':
+        author = User.query.filter_by(username = session['username']).first()
         blog_title = request.form['blog-title']
         blog_body = request.form['blog-body']
         title_error = ''
@@ -38,17 +39,19 @@ def create_post():
 @app.route('/blog', methods = ['POST','GET'])
 def blog():
     blogs = Blog.query.all()
+    blog_id = request.args.get('id')
+    user_id = request.args.get('user')
 
-    if 'id' in request.args:
-        id = request.args.get('id')
-        blogpost = Blog.query.get(id)
+    if blog_id:
+        blogpost = Blog.query.get(blog_id)
         return render_template('post.html', post = blogpost)
 
-    if "user" in request.args:
-        owner_id = request.args.get('user')
-        posts = Blog.query.filter_by(owner_id = owner_id)
-        username = User.query.get(owner_id)
+    if user_id:
+        posts = Blog.query.filter_by(owner_id = user_id)
+        username = User.query.get(user_id)
         return render_template('singleUser.html', user = username, posts = posts)
+
+    return render_template('blog.html', posts = blogs)
 
 @app.route('/signup', methods = ['POST', 'GET'])
 def signup():
@@ -88,7 +91,7 @@ def login():
             if check_password_hash(password, user.hashword):
                 session['user'] = user.username
                 flash('Welcome back, ' + user.username)
-                return redirect("/")
+                return redirect("/blog")
         flash('Incorrect username or password')
         return redirect('/login')
     
