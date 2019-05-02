@@ -5,6 +5,7 @@ from app import app, db
 from model import User, Blog
 from hashutils import make_password_hash, check_password_hash
 
+app.secret_key = 'supersecretunknownkeythatkeepseverythingsafebutnotreally'
 
 @app.route('/', methods = ['POST','GET'])
 def index():
@@ -89,13 +90,18 @@ def login():
 @app.route('/logout', methods = ['POST', 'GET'])
 def logout():
     del session['user']
-    return redirect('/')
+    return redirect('/blog')
 
 def logged_in_user():
     owner = User.query.filter_by(username=session['user']).first()
     return owner
 
-app.secret_key = 'supersecretunknownkeythatkeepseverythingsafebutnotreally'
+@app.before_request
+def require_login():
+    allowed_routes = ['login','blog','index','signup']
+    if request.endpoint not in allowed_routes and 'user' not in session:
+        return redirect('/login')
+
 
 if __name__ == "__main__":
     app.run()
