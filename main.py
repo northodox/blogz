@@ -63,11 +63,11 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
-        username_db_count = User.query.filter_by(username=username).count()
+        username_exists = User.query.filter_by(username=username).first()
 
         if not username:
             username_error = 'Aw come on, put in a username!'
-        if username_db_count > 0:
+        if username_exists:
             username_error = 'Uh Oh! That name is already taken!'
 
         if password == '':
@@ -82,15 +82,17 @@ def signup():
         elif verify == '':
             verify_password_error = 'Passwords did not match. They have to match!'
 
-        if username_db_count < 1 and not username_error and not password_error and not verify_password_error:
-            user = User(username, password)
+        if not username_exists and not username_error and not password_error and not verify_password_error:
+            user = User(username = username, hashword = password)
             db.session.add(user)
             db.session.commit()
             session['username'] = username
-            return redirect("/")
+            return redirect("/blog")
     
-    else:
-        return render_template('signup.html', username_error = username_error, password_error = password_error, verify_password_error = verify_password_error, username = username, password = password, verify = verify)
+        else:
+            return render_template('signup.html', username_error = username_error, password_error = password_error, verify_password_error = verify_password_error, username = username, password = password, verify = verify)
+    
+    return render_template('signup.html')
 
 
 @app.route('/login', methods = ['POST', 'GET'])
