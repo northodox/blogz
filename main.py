@@ -41,6 +41,7 @@ def blog():
     blogs = Blog.query.all()
     blog_id = request.args.get('id')
     user_id = request.args.get('user')
+    user = User.query.get('username')
 
     if blog_id:
         blogpost = Blog.query.get(blog_id)
@@ -51,7 +52,7 @@ def blog():
         username = User.query.get(user_id)
         return render_template('singleUser.html', user = username, posts = posts)
 
-    return render_template('blog.html', posts = blogs)
+    return render_template('blog.html', posts = blogs, user = user)
 
 @app.route('/signup', methods = ['POST', 'GET'])
 def signup():
